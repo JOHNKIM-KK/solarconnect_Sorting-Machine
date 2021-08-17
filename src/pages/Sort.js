@@ -42,25 +42,15 @@ function Sort() {
   };
 
   const handleClickSort = () => {
-    if (loading) {
+    if (loading || inputs.length === 0 || errorMessage) {
       return;
     }
-    if (inputs.length === 0) {
-      return;
-    }
-    if (errorMessage) {
-      return;
-    }
-
-    console.log(errorMessage, "errorMessage");
-
     setLoading(true);
     setSortArr([...insertionSort(inputs)]);
     setTimeout(() => {
       setLoading(false);
       setSortReverseArr([...insertionReverseSort(inputs)]);
     }, 3000);
-    console.log("asd");
   };
 
   const handleValidateCheck = useCallback(() => {
@@ -99,13 +89,7 @@ function Sort() {
         />
       </InputBox>
       <ErrorMsg>{errorMessage}</ErrorMsg>
-      <SortBtn
-        onClick={() => {
-          handleClickSort();
-        }}
-      >
-        정렬
-      </SortBtn>
+      <SortBtn onClick={handleClickSort}>정렬</SortBtn>
       {!errorMessage && (
         <>
           <Result>
