@@ -2,11 +2,13 @@ import React from 'react';
 import styled from 'styled-components';
 import GlobalStyles from 'styles/GlobalStyles';
 import Sort from 'pages/Sort';
+import Main from 'pages/Main';
 
 function App() {
   return (
     <Container>
       <GlobalStyles />
+      <Main />
       <Sort />
     </Container>
   );
