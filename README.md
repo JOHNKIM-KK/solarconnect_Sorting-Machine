@@ -45,6 +45,7 @@ $ yarn start
 
 - [김명준](https://github.com/JOHNKIM-KK)
 
+- CRA 초기세팅
 - 재사용 가능한 component로 지역시간표기법을 통한 타이머 구현
 - 전체적인 컴포넌트 스타일링 (with styled components)
 
