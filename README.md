@@ -1,5 +1,8 @@
 ## 기업과제 솔라커넥트 #2 Sorting Machine
 
+![스크린샷 2021-08-17 오후 10 50 58](https://user-images.githubusercontent.com/76652614/129738221-b096e80b-632c-4168-912c-f6ca3cb38ef7.png)
+
+
 ### 배포주소
 
 
@@ -43,7 +46,7 @@ $ yarn start
 - [김명준](https://github.com/JOHNKIM-KK)
 
 - 재사용 가능한 component로 지역시간표기법을 통한 타이머 구현
-- 메인페이지 레이아웃 구현
+- 전체적인 컴포넌트 스타일링 (with styled components)
 
 
 
