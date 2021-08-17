@@ -12,7 +12,7 @@ function LiveTime({ lang }) {
     setTime(Date.now());
   }, 1000);
 
-  return <Moment format="LLLL ">{time}</Moment>;
+  return <Moment format="LLLL">{time}</Moment>;
 }
 
 export default LiveTime;

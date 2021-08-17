@@ -60,46 +60,117 @@ function Sort() {
 
   return (
     <Container>
-      <input onChange={handleChangeNum} />
-      <button
+      <InputBox>
+        <InputNumber
+          onChange={handleChangeNum}
+          placeholder="숫자를 입력하세요. ex) 1, 2, 3, 4"
+        />
+      </InputBox>
+      <ErrorMsg>{errorMessage}</ErrorMsg>
+      <SortBtn
         onClick={async () => {
           await handleValidateCheck();
           await handleClickSort();
         }}
       >
-        정렬 버튼
-      </button>
-      {errorMessage ? (
-        <ErrorMsg>{errorMessage}</ErrorMsg>
-      ) : (
+        정렬
+      </SortBtn>
+      {!errorMessage && (
         <>
-          <section>
+          <Result>
+            <ResultHeader>오름차순</ResultHeader>
             {sortArr.map((item, idx) => {
               if (sortArr.length - 1 === idx) {
                 return <span key={idx}>{item}</span>;
               }
               return <span key={idx}>{item},</span>;
             })}
-          </section>
-          <section>
+          </Result>
+          <Result>
+            <ResultHeader>내림차순</ResultHeader>
             {sortReverseArr.map((item, idx) => {
               if (sortReverseArr.length - 1 === idx) {
                 return <span key={idx}>{item}</span>;
               }
               return <span key={idx}>{item},</span>;
             })}
-          </section>
+          </Result>
         </>
       )}
     </Container>
   );
 }
 
-const Container = styled.article``;
+const Container = styled.article`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 10px 20px;
+`;
+
+const InputBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin: 20px 0px 10px 0px;
+  padding: 15px 14px 15px 30px;
+  background: #fff;
+  box-shadow: 0 8px 16px 0 rgb(0 0 0 / 20%);
+  border-radius: 10px;
+`;
+
+const InputNumber = styled.input`
+  width: 100%;
+  padding: 5px 0px;
+  border: none;
+  background: none;
+  outline: none;
+  font-size: 20px;
+
+  &:focus {
+    border-bottom: 3px solid #156aff;
+  }
+`;
+
+const SortBtn = styled.button`
+  width: 100%;
+  margin: 10px 0px;
+  padding: 10px 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #156aff;
+  color: #fff;
+  font-size: 17px;
+
+  &:focus {
+    cursor: pointer;
+  }
+`;
+
+const Result = styled.section`
+  width: 100%;
+  margin: 10px 0px;
+  padding: 15px 14px 15px 30px;
+  background: #fff;
+  box-shadow: 0 8px 16px 0 rgb(0 0 0 / 20%);
+  border-radius: 10px;
+
+  span {
+    color: #156aff;
+    font-size: 20px;
+    font-weight: 600;
+  }
+`;
+
+const ResultHeader = styled.h2`
+  margin-bottom: 10px;
+  font-size: 15px;
+  font-weight: 700;
+`;
 
 const ErrorMsg = styled.span`
+  padding-left: 8px;
   color: red;
-  display: flex;
 `;
 
 export default Sort;
