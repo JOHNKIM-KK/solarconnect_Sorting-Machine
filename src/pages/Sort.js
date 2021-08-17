@@ -5,11 +5,12 @@ function Sort() {
   const [inputs, setInputs] = useState([]);
   const [sortArr, setSortArr] = useState([]);
   const [sortReverseArr, setSortReverseArr] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleChangeNum = e => {
     const { value } = e.target;
-    setInputs([...value.split(",")].map(Number));
+    setInputs(() => [...value.split(",")]);
   };
 
   const insertionSort = function (arr, count = 0) {
@@ -18,7 +19,7 @@ function Sort() {
     }
 
     for (let i = 0; i < arr.length; i++) {
-      if (arr[i] > arr[i + 1]) {
+      if (Number(arr[i]) > Number(arr[i + 1])) {
         [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
       }
     }
@@ -32,7 +33,7 @@ function Sort() {
     }
 
     for (let i = 0; i < arr.length; i++) {
-      if (arr[i] < arr[i + 1]) {
+      if (Number(arr[i]) < Number(arr[i + 1])) {
         [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
       }
     }
@@ -41,27 +42,46 @@ function Sort() {
   };
 
   const handleClickSort = () => {
-    setSortArr([...insertionSort(inputs)]);
-    setTimeout(
-      () => setSortReverseArr([...insertionReverseSort(inputs)]),
-      3000
-    );
-  };
-
-  const handleValidateCheck = () => {
-    const results = inputs?.filter(item => isNaN(item));
-    if (results.length !== 0) {
-      setErrorMessage("올바른 형식을 입력하세요 ex) (10, 2, 45, 1)");
+    if (errorMessage === "") {
       return;
     }
+    setLoading(true);
+    setSortArr([...insertionSort(inputs)]);
+    setTimeout(() => {
+      setLoading(false);
+      setSortReverseArr([...insertionReverseSort(inputs)]);
+    }, 3000);
+  };
 
+  const handleValidateCheck = async () => {
+    for (let i = 0; i < inputs.length; i++) {
+      if (inputs[i] === "") {
+        setErrorMessage("올바른 형식을 입력하세요 ex) (10, 2, 45, 1)");
+        return;
+      }
+      if (isNaN(inputs[i])) {
+        setErrorMessage(
+          "숫자가 아닌 값은 입력 할 수 없습니다 ex) (10, 2, 45, 1)"
+        );
+        return;
+      }
+    }
+    setInputs([]);
     setErrorMessage("");
+  };
+
+  const handleKeyPress = async e => {
+    if (e.key === "Enter") {
+      await handleValidateCheck();
+      handleClickSort();
+    }
   };
 
   return (
     <Container>
       <InputBox>
         <InputNumber
+          onKeyPress={handleKeyPress}
           onChange={handleChangeNum}
           placeholder="숫자를 입력하세요. ex) 1, 2, 3, 4"
         />
@@ -70,7 +90,7 @@ function Sort() {
       <SortBtn
         onClick={async () => {
           await handleValidateCheck();
-          await handleClickSort();
+          handleClickSort();
         }}
       >
         정렬
@@ -88,12 +108,18 @@ function Sort() {
           </Result>
           <Result>
             <ResultHeader>내림차순</ResultHeader>
-            {sortReverseArr.map((item, idx) => {
-              if (sortReverseArr.length - 1 === idx) {
-                return <span key={idx}>{item}</span>;
-              }
-              return <span key={idx}>{item},</span>;
-            })}
+            {loading ? (
+              <div>loading...</div>
+            ) : (
+              <>
+                {sortReverseArr.map((item, idx) => {
+                  if (sortReverseArr.length - 1 === idx) {
+                    return <span key={idx}>{item}</span>;
+                  }
+                  return <span key={idx}>{item},</span>;
+                })}
+              </>
+            )}
           </Result>
         </>
       )}
