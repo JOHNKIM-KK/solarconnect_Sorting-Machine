@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 
 function Sort() {
@@ -6,11 +6,11 @@ function Sort() {
   const [sortArr, setSortArr] = useState([]);
   const [sortReverseArr, setSortReverseArr] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const handleChangeNum = e => {
     const { value } = e.target;
-    setInputs(() => [...value.split(",")]);
+    setInputs([...value.split(",")]);
   };
 
   const insertionSort = function (arr, count = 0) {
@@ -42,18 +42,28 @@ function Sort() {
   };
 
   const handleClickSort = () => {
-    if (errorMessage === "") {
+    if (loading) {
       return;
     }
+    if (inputs.length === 0) {
+      return;
+    }
+    if (errorMessage) {
+      return;
+    }
+
+    console.log(errorMessage, "errorMessage");
+
     setLoading(true);
     setSortArr([...insertionSort(inputs)]);
     setTimeout(() => {
       setLoading(false);
       setSortReverseArr([...insertionReverseSort(inputs)]);
     }, 3000);
+    console.log("asd");
   };
 
-  const handleValidateCheck = async () => {
+  const handleValidateCheck = useCallback(() => {
     for (let i = 0; i < inputs.length; i++) {
       if (inputs[i] === "") {
         setErrorMessage("올바른 형식을 입력하세요 ex) (10, 2, 45, 1)");
@@ -66,13 +76,15 @@ function Sort() {
         return;
       }
     }
-    setInputs([]);
     setErrorMessage("");
-  };
+  }, [inputs]);
 
-  const handleKeyPress = async e => {
+  useEffect(() => {
+    handleValidateCheck();
+  }, [handleValidateCheck]);
+
+  const handleKeyPress = e => {
     if (e.key === "Enter") {
-      await handleValidateCheck();
       handleClickSort();
     }
   };
@@ -88,8 +100,7 @@ function Sort() {
       </InputBox>
       <ErrorMsg>{errorMessage}</ErrorMsg>
       <SortBtn
-        onClick={async () => {
-          await handleValidateCheck();
+        onClick={() => {
           handleClickSort();
         }}
       >
