@@ -1,52 +1,112 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React, { useState } from "react";
+import styled from "styled-components";
 
 function Sort() {
   const [inputs, setInputs] = useState([]);
   const [sortArr, setSortArr] = useState([]);
+  const [sortReverseArr, setSortReverseArr] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleChangeNum = e => {
     const { value } = e.target;
-    setInputs([...value.split(',')].map(Number));
+    setInputs([...value.split(",")].map(Number));
   };
 
-  const quickSort = function (arr, transform = item => item) {
-    if (arr.length <= 1) {
+  const insertionSort = function (arr, count = 0) {
+    if (count === arr.length) {
       return arr;
     }
-    let pivot = arr[0];
-    let left = [];
-    let right = [];
 
-    for (let i = 1; i < arr.length; i++) {
-      if (transform(arr[i]) < transform(pivot)) {
-        left.push(arr[i]);
-      } else {
-        right.push(arr[i]);
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i] > arr[i + 1]) {
+        [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
       }
     }
-    let ls = quickSort(left, transform);
-    let rs = quickSort(right, transform);
-    return [...ls, pivot, ...rs];
+    insertionSort(arr, count + 1);
+    return arr;
+  };
+
+  const insertionReverseSort = function (arr, count = 0) {
+    if (count === arr.length) {
+      return arr;
+    }
+
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i] < arr[i + 1]) {
+        [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
+      }
+    }
+    insertionReverseSort(arr, count + 1);
+    return arr;
   };
 
   const handleClickSort = () => {
-    setSortArr(quickSort(inputs));
+    setSortArr([...insertionSort(inputs)]);
+    setTimeout(
+      () => setSortReverseArr([...insertionReverseSort(inputs)]),
+      3000
+    );
   };
+
+  const handleValidateCheck = () => {
+    const results = inputs?.filter(item => isNaN(item));
+    if (results.length !== 0) {
+      setErrorMessage("올바른 형식을 입력하세요 ex) (10, 2, 45, 1)");
+      return;
+    }
+
+    setErrorMessage("");
+  };
+
   return (
     <Container>
-      <input onChange={handleChangeNum} name="start" />
-      <button onClick={handleClickSort}>정렬 버튼</button>
-      <div>
-        {sortArr.map((item, idx) => {
-          return <span key={idx}>{item},</span>;
-        })}
-      </div>
-      <div>내림차순</div>
+      <input onChange={handleChangeNum} />
+      <button
+        onClick={async () => {
+          await handleValidateCheck();
+          await handleClickSort();
+        }}
+      >
+        정렬 버튼
+      </button>
+      {errorMessage ? (
+        <ErrorMsg>{errorMessage}</ErrorMsg>
+      ) : (
+        <>
+          <section>
+            {sortArr.map((item, idx) => {
+              if (sortArr.length - 1 === idx) {
+                return <span key={idx}>{item}</span>;
+              }
+              return <span key={idx}>{item},</span>;
+            })}
+          </section>
+          <section>
+            {sortReverseArr.map((item, idx) => {
+              if (sortReverseArr.length - 1 === idx) {
+                return <span key={idx}>{item}</span>;
+              }
+              return <span key={idx}>{item},</span>;
+            })}
+          </section>
+        </>
+      )}
     </Container>
   );
 }
 
-const Container = styled.div``;
+const Container = styled.article``;
+
+const ErrorMsg = styled.span`
+  color: red;
+  display: flex;
+`;
 
 export default Sort;
+
+// if (isNaN(Number(item))) {
+//   setErrorMessage("올바른 형식을 입력하세요 ex) (10,2,45,1)");
+//   return;
+// }
+// setErrorMessage("");
+// return Number(item);
