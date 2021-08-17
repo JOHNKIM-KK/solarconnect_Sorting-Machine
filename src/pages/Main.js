@@ -1,6 +1,6 @@
-import React from 'react';
-import LiveTime from 'components/LiveTime';
-import styled from 'styled-components';
+import React from "react";
+import LiveTime from "components/LiveTime";
+import styled from "styled-components";
 
 function Main() {
   return (
@@ -13,7 +13,7 @@ function Main() {
         <Wrapper>
           <City>Seoul</City>
           <Time>
-            <LiveTime lang={'ko'} />
+            <LiveTime lang={"ko"} />
           </Time>
         </Wrapper>
       </ClockContainer>
@@ -22,7 +22,7 @@ function Main() {
         <Wrapper>
           <City>New York</City>
           <Time>
-            <LiveTime lang={'en'} />
+            <LiveTime lang={"en"} />
           </Time>
         </Wrapper>
       </ClockContainer>

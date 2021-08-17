@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import moment from 'moment';
-import Moment from 'react-moment';
-import 'moment/locale/ko';
-import { useInterval } from 'react-use';
+import React, { useState } from "react";
+import moment from "moment";
+import Moment from "react-moment";
+import "moment/locale/ko";
+import { useInterval } from "react-use";
 
 function LiveTime({ lang }) {
   const [time, setTime] = useState(Date.now);
